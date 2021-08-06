@@ -1,7 +1,7 @@
 <?php 
 
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET");
+header("Access-Control-Allow-Methods: PUT");
 
 if($_SERVER["REQUEST_METHOD"] == 'PUT'){
 
@@ -36,6 +36,6 @@ if($_SERVER["REQUEST_METHOD"] == 'PUT'){
 else 
 {
     http_response_code(405);
-    echo "Metohd Not Allowed";
+    echo "Method Not Allowed";
     die();
 }
