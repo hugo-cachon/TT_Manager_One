@@ -43,6 +43,4 @@ else
     echo "Method Not Allowed";
     die();
 }
-
-
 ?>
