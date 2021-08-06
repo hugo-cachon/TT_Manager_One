@@ -16,24 +16,24 @@ if($_SERVER["REQUEST_METHOD"] == 'GET'){
 
     $user = new Users($db);
 
-    $donnees = json_decode(file_get_contents("php://input"));
+    $data = json_decode(file_get_contents("php://input"));
 
-    if(!empty($donnees->id))
+    if(!empty($data->id))
     {
-        $user->id = $donnees->id;
+        $user->id = $data->id;
 
         $user->getUserById();
 
         if($user->id != null)
         {
-            $result = [
+            $result_arr = [
                 "id" => $user->id,
                 "name" => $user->name,
                 "email" => $user->email,
             ];
 
             http_response_code(200);
-            echo json_encode($result);
+            echo json_encode($result_arr);
         }
         else
         {
