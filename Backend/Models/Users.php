@@ -77,12 +77,13 @@ class Users {
 
     public function updateUser()
     {
-        $stmt = "UPDATE " . $this->table . " SET name =:name, email = :email ";
+        $stmt = "UPDATE " . $this->table . " SET name =:name, email = :email WHERE id =:id";
 
         $query = $this->connexion->prepare($stmt);
 
         $query->bindParam(":name", $this->name);
         $query->bindParam(":email", $this->email);
+        $query->bindParam(":id", $this->id);
 
         if($query->execute())
         {
