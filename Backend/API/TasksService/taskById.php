@@ -1,7 +1,10 @@
 <?php 
 
 header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: GET");
+header("Access-Control-Max-Age: 3600");
+header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
 if($_SERVER["REQUEST_METHOD"] == 'GET'){
 
@@ -15,28 +18,29 @@ if($_SERVER["REQUEST_METHOD"] == 'GET'){
 
     $data = json_decode(file_get_contents("php://input"));
 
-    if(!empty($task->id ))
+    if(!empty($data->id))
     {
         $task->id = $data->id;
 
-        $task->getTaskById($data->id);
+        $task->getTaskById();
 
         if($task->id != null){
 
-            $user_array = [
+            $task_array = [
                 "id" => $task->id,
+                "user_id" => $task->user_id,
                 "title" => $task->title,
-                "description" => $produit->description,
-                "status" => $produit->status
+                "description" => $task->description,
+                "creation_date" => $task->creation_date,
             ];
 
             http_response_code(200);
-            echo json_encode($user_array);
+            echo json_encode($task_array);
     }
     else
     {
         http_response_code(404);     
-        echo json_encode(["User id do not exists"]);
+        echo json_encode(["Task does not exists"]);
     }
     }
 }
