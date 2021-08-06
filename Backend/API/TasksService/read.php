@@ -28,7 +28,6 @@ if($_SERVER["REQUEST_METHOD"] == 'GET'){
                 "id" => $id,
                 "user_id" => $user_id,
                 "title" => $title,
-                "status" => $status,
                 "description" => $description
             ];
 
@@ -45,6 +44,4 @@ else
     echo "Method Not Allowed";
     die();
 }
-
-
 ?>
