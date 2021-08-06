@@ -1,51 +1,47 @@
 <?php 
 
 header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: GET");
-header("Access-Control-Max-Age: 3600");
-header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
 if($_SERVER["REQUEST_METHOD"] == 'GET'){
 
     include_once '../../Config/Database.php';
     include_once '../../Models/Tasks.php';
-    
-    $database = new Db_connect();
+
+    $database = new db_connect();
     $db = $database->setConnection();
 
-    $task = new Tasks($db);
+    $tasks = new Tasks($db);
+    
+    $stmt = $tasks->getAllTasks();
 
-    $data = json_decode(file_get_contents("php://input"));
-
-    if(!empty($data->id))
+    if($stmt->rowCount() > 0)
     {
-        $task->id = $data->id;
+        $tasks_array = [];
+        $tasks_array["tasks"] = [];
 
-        $task->getTaskById();
+        while($row = $stmt->fetch(PDO::FETCH_ASSOC))
+        {
+            extract($row);
 
-        if($task->id != null){
-
-            $task_array = [
-                "id" => $task->id,
-                "user_id" => $task->user_id,
-                "title" => $task->title,
-                "description" => $task->description,
-                "creation_date" => $task->creation_date,
+            $data = [
+                "id" => $id,
+                "user_id" => $user_id,
+                "title" => $title,
+                "description" => $description
             ];
 
-            http_response_code(200);
-            echo json_encode($task_array);
-    }
-    else
-    {
-        http_response_code(404);     
-        echo json_encode(["Task does not exists"]);
-    }
+            $tasks_array["tasks"][] = $data;
+        }
+
+        http_response_code(200);
+        print_r(json_encode($tasks_array));
     }
 }
-else
+else 
 {
     http_response_code(405);
-    echo json_encode(["Method Not Allowed"]);
+    echo "Method Not Allowed";
+    die();
 }
+?>
